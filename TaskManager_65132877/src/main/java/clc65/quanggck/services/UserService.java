@@ -2,7 +2,6 @@ package clc65.quanggck.services;
 
 import java.util.List;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import clc65.quanggck.models.User;
@@ -12,12 +11,9 @@ import clc65.quanggck.repos.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers() {
@@ -33,12 +29,6 @@ public class UserService {
     }
 
     public User save(User user) {
-
-        // Hash password trước khi lưu
-        user.setPassword(
-                passwordEncoder.encode(user.getPassword())
-        );
-
         return userRepository.save(user);
     }
 
@@ -51,13 +41,10 @@ public class UserService {
         oldUser.setEmail(user.getEmail());
         oldUser.setRole(user.getRole());
 
-        // Chỉ hash khi có nhập password mới
         if (user.getPassword() != null &&
             !user.getPassword().trim().isEmpty()) {
 
-            oldUser.setPassword(
-                    passwordEncoder.encode(user.getPassword())
-            );
+            oldUser.setPassword(user.getPassword());
         }
 
         return userRepository.save(oldUser);
