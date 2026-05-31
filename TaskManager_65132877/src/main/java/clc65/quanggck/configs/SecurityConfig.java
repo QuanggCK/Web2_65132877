@@ -4,10 +4,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import clc65.quanggck.services.CustomUserDetailService;
 
 @Configuration
 public class SecurityConfig {
+
+    private final CustomUserDetailService customUserDetailService;
+
+    public SecurityConfig(CustomUserDetailService customUserDetailService) {
+        this.customUserDetailService = customUserDetailService;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
@@ -17,11 +32,13 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/login",
+                    "/register",
+                    "/css/**",
+                    "/js/**"
+                ).permitAll()
 
-                // Cho phép truy cập trang đăng nhập
-                .requestMatchers("/login").permitAll()
-
-                // Tất cả trang còn lại phải đăng nhập
                 .anyRequest().authenticated()
             )
 
