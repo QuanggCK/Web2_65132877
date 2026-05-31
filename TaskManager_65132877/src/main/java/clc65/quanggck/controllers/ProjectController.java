@@ -53,11 +53,20 @@ public class ProjectController {
         return "project/edit";
     }
 
-    // Cập nhật
     @PostMapping("/update")
     public String updateProject(@ModelAttribute Project project) {
 
-        projectService.save(project);
+        Project oldProject =
+                projectService.getProjectById(project.getProjectId());
+
+        if (oldProject == null) {
+            return "redirect:/projects";
+        }
+
+        oldProject.setProjectName(project.getProjectName());
+        oldProject.setDescription(project.getDescription());
+
+        projectService.save(oldProject);
 
         return "redirect:/projects";
     }
