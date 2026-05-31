@@ -66,8 +66,8 @@ public class ProjectController {
     }
 
     // 4. Form sửa thông tin dự án
-    @GetMapping("/edit/{id}")
-    public String editProject(@PathVariable Integer id, Model model) {
+    @GetMapping("/projects/edit/{id}")
+    public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Project project = projectService.getProjectById(id);
 
         if (project == null) {
@@ -96,8 +96,8 @@ public class ProjectController {
     }
 
     // 6. Xóa dự án
-    @GetMapping("/delete/{id}")
-    public String deleteProject(@PathVariable Integer id) {
+    @GetMapping("/projects/delete/{id}")
+    public String deleteProject(@PathVariable("id") Integer id) {
         projectService.delete(id);
         return "redirect:/projects";
     }

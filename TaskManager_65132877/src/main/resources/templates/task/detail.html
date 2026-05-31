@@ -52,7 +52,8 @@
                                         <strong th:text="${task.project != null ? task.project.projectName : 'Không rõ'}">Dự án mẫu</strong>
                                     </p>
                                 </div>
-                                <a th:href="@{/tasks/edit/{id}(id=${task.taskId})}" class="btn btn-outline-warning btn-sm fw-semibold">
+                                
+                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/tasks/edit/{id}(id=${task.taskId})}" class="btn btn-outline-warning btn-sm fw-semibold">
                                     <i class="bi bi-pencil shadow-sm"></i> Chỉnh sửa
                                 </a>
                             </div>
@@ -75,13 +76,13 @@
                                     <strong class="text-danger" th:text="${task.deadline != null ? #dates.format(task.deadline, 'dd/MM/yyyy') : '--/--/----'}">15/01/2026</strong>
                                 </div>
                                 <div class="col-6 col-sm-3">
-                                    <span class="text-muted small d-block">Người tạo</span>
-                                    <strong class="text-dark" th:text="${task.createdBy != null ? task.createdBy.fullName : 'Hệ thống'}">Admin</strong>
+                                    <span class="text-muted small d-block">Ngày tạo</span>
+                                    <strong class="text-dark" th:text="${task.createdBy != null && task.createdBy?.fullName != null ? task.createdBy.fullName : 'Hệ thống'}">Admin</strong>
                                 </div>
                                 <div class="col-6 col-sm-3">
                                     <span class="text-muted small d-block">Phân công cho</span>
                                     <span class="badge bg-secondary bg-opacity-10 text-dark border px-2 py-1 mt-1" 
-                                          th:text="${task.assignedTo != null ? task.assignedTo.fullName : 'Chưa giao ai'}">Chưa giao ai</span>
+                                          th:text="${task.assignedTo != null && task.assignedTo?.fullName != null ? task.assignedTo.fullName : 'Chưa giao ai'}">Chưa giao ai</span>
                                 </div>
                             </div>
 
@@ -111,7 +112,7 @@
                                 
                                 <div th:each="comment : ${comments}" class="comment-item p-3 rounded mb-3 shadow-xs">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="fw-bold text-dark small" th:text="${comment.user != null ? comment.user.fullName : 'Người dùng ẩn danh'}">Nguyễn Văn A</span>
+                                        <span class="fw-bold text-dark small" th:text="${comment.user != null && comment.user?.fullName != null ? comment.user.fullName : 'Người dùng ẩn danh'}">Nguyễn Văn A</span>
                                         <span class="text-muted style-date" style="font-size: 0.75rem;" 
                                               th:text="${comment.createdAt != null ? #dates.format(comment.createdAt, 'dd/MM/yyyy HH:mm') : ''}">31/05/2026 14:30</span>
                                     </div>

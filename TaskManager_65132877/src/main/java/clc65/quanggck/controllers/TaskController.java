@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import clc65.quanggck.models.Task;
+import clc65.quanggck.models.User;
 import clc65.quanggck.models.Comment;
 import clc65.quanggck.services.TaskService;
 import clc65.quanggck.services.ProjectService;
@@ -12,6 +13,7 @@ import clc65.quanggck.services.UserService;
 import clc65.quanggck.services.TaskStatusService;
 import clc65.quanggck.services.CommentService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -37,14 +39,14 @@ public class TaskController {
         this.commentService = commentService;
     }
 
-    // 1. Danh sách công việc (Giữ nguyên)
+    // 1. Danh sách công việc
     @GetMapping
     public String listTasks(Model model) {
         model.addAttribute("tasks", taskService.getAllTasks());
         return "task/list";
     }
 
-    // 2. Form thêm mới công việc (Đã sửa - Nạp thêm danh sách Project và User)
+    // 2. Form thêm mới công việc 
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("task", new Task());
@@ -56,16 +58,16 @@ public class TaskController {
         return "task/add";
     }
 
-    // 3. Lưu công việc mới (Giữ nguyên)
+    // 3. Lưu công việc mới
     @PostMapping("/save")
     public String saveTask(@ModelAttribute Task task) {
         taskService.save(task);
         return "redirect:/tasks";
     }
 
-    // 4. Form sửa công việc (Đã sửa - Nạp thêm Project, User và Status)
+    // 4. Form sửa công việc (ĐÃ SỬA: Bổ sung định danh "id" vào @PathVariable)
     @GetMapping("/edit/{id}")
-    public String editTask(@PathVariable Integer id, Model model) {
+    public String editTask(@PathVariable("id") Integer id, Model model) {
         Task task = taskService.getTaskById(id);
 
         if (task == null) {
@@ -107,16 +109,16 @@ public class TaskController {
         return "redirect:/tasks";
     }
 
-    // 6. Xóa công việc (Giữ nguyên)
+    // 6. Xóa công việc (ĐÃ SỬA: Bổ sung định danh "id" vào @PathVariable)
     @GetMapping("/delete/{id}")
-    public String deleteTask(@PathVariable Integer id) {
+    public String deleteTask(@PathVariable("id") Integer id) {
         taskService.delete(id);
         return "redirect:/tasks";
     }
 
-    // 7. Chi tiết công việc (Đã sửa - Nạp thêm danh sách Comment)
+    // 7. Chi tiết công việc (ĐÃ SỬA: Bổ sung định danh "id" vào @PathVariable)
     @GetMapping("/{id}")
-    public String detailTask(@PathVariable Integer id, Model model) {
+    public String detailTask(@PathVariable("id") Integer id, Model model) {
         Task task = taskService.getTaskById(id);
 
         if (task == null) {
@@ -130,5 +132,47 @@ public class TaskController {
         model.addAttribute("comments", comments);
 
         return "task/detail";
+    }
+ // Thêm hàm này vào trong TaskController.java
+    @PostMapping("/{id}/comment")
+    public String addComment(@PathVariable("id") Integer id, 
+                             @RequestParam("content") String content,
+                             Principal principal) { // <-- Thêm Principal để lấy user đang đăng nhập
+        
+        // 1. Kiểm tra công việc có tồn tại không
+        Task task = taskService.getTaskById(id);
+        if (task == null) {
+            return "redirect:/tasks";
+        }
+
+        // 2. Lấy thông tin tài khoản đang đăng nhập
+        if (principal == null) {
+            // Nếu chưa đăng nhập mà bằng cách nào đó vào đây thì đá về trang login
+            return "redirect:/login"; 
+        }
+        String username = principal.getName(); // Lấy tên tài khoản/email đăng nhập
+        
+        // Tìm đối tượng User tương ứng trong Database
+        // Giả sử trong UserService của bạn có hàm findByUsername hoặc findByEmail
+        User currentUser = userService.getByUsername(username); 
+        
+        if (currentUser == null) {
+            return "redirect:/tasks/" + id + "?error=user_not_found";
+        }
+
+        // 3. Tạo đối tượng Comment mới và gán đầy đủ thông tin
+        Comment comment = new Comment();
+        comment.setTask(task);
+        comment.setContent(content);
+        comment.setUser(currentUser); // <-- QUAN TRỌNG: Gán user vào đây để hết lỗi NOT NULL
+        
+        // Nếu trong Entity Comment chưa tự động sinh thời gian, bạn có thể gán thủ công:
+        // comment.setCreatedAt(new java.util.Date()); 
+
+        // 4. Lưu vào Database
+        commentService.save(comment);
+
+        // 5. Quay lại trang chi tiết công việc
+        return "redirect:/tasks/" + id;
     }
 }
