@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách dự án - TaskManager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Đảm bảo layout không bị vỡ và sidebar chiếm trọn chiều cao màn hình */
+        .main-wrapper {
+            min-height: calc(100vh - 56px);
+        }
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div th:replace="~{fragments/header :: header-nav}"></div>
+
+    <div class="d-flex main-wrapper">
+        
+        <div th:replace="~{fragments/sidebar :: sidebar-nav}"></div>
+        
+        <div class="flex-grow-1 p-4">
+            <div class="container-fluid">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="text-dark fw-bold mb-1">Quản lý Dự án</h2>
+                        <p class="text-muted small mb-0">Xem và tổ chức toàn bộ các dự án trong hệ thống của bạn</p>
+                    </div>
+                    <a th:href="@{/projects/add}" class="btn btn-info text-white fw-semibold shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-plus-circle-fill"></i> Tạo dự án mới
+                    </a>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="ps-4" style="width: 8%">Mã số</th>
+                                        <th scope="col" style="width: 25%">Tên dự án</th>
+                                        <th scope="col" style="width: 35%">Mô tả ngắn</th>
+                                        <th scope="col" style="width: 15%">Người tạo</th>
+                                        <th scope="col" class="text-end pe-4" style="width: 17%">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${#lists.isEmpty(projects)}">
+                                        <td colspan="5" class="text-center py-5 text-muted">
+                                            <i class="bi bi-folder-x display-6 d-block mb-3 text-secondary"></i>
+                                            Hiện tại chưa có dự án nào được tạo.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr th:each="project : ${projects}">
+                                        <td class="ps-4 fw-bold text-secondary" th:text="'#' + ${project.projectId}">#1</td>
+                                        <td>
+                                            <a th:href="@{/tasks(projectId=${project.projectId})}" class="fw-bold text-info text-decoration-none d-flex align-items-center gap-2">
+                                                <i class="bi bi-folder-fill text-warning"></i>
+                                                <span th:text="${project.projectName}">Tên dự án mẫu</span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted text-truncate d-inline-block" style="max-width: 400px;" 
+                                                  th:text="${project.description != null && !project.description.isEmpty() ? project.description : 'Không có mô tả'}">
+                                                Mô tả ngắn của dự án...
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary bg-opacity-25 text-dark border" 
+                                                  th:text="${project.createdBy != null ? project.createdBy.fullName : 'Hệ thống'}">
+                                                Nguyễn Văn A
+                                            </span>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a th:href="@{/tasks(projectId=${project.projectId})}" class="btn btn-outline-primary btn-sm" title="Xem công việc">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a th:href="@{/projects/edit/{id}(id=${project.projectId})}" class="btn btn-outline-warning btn-sm" title="Sửa dự án">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a th:href="@{/projects/delete/{id}(id=${project.projectId})}" 
+                                                   class="btn btn-outline-danger btn-sm" 
+                                                   title="Xóa dự án"
+                                                   onclick="return confirm('Bạn có chắc chắn muốn xóa dự án này? Tất cả dữ liệu liên quan có thể bị ảnh hưởng.');">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

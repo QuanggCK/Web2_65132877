@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <div th:fragment="sidebar-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark shadow" style="width: 280px; min-height: 100vh;">
+        
+        <a th:href="@{/projects}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none border-bottom border-secondary pb-3 w-100">
+            <i class="bi bi-kanban-fill text-info fs-4 me-2"></i>
+            <span class="fs-5 fw-bold text-info">TaskDev Manager</span>
+        </a>
+        
+        <ul class="nav nav-pills flex-column mb-auto pt-3">
+            <li class="nav-item mb-1">
+                <a th:href="@{/projects}" class="nav-link text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-grid-1x2"></i> Tất cả dự án
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a th:href="@{/tasks}" class="nav-link text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-list-task"></i> Tất cả công việc
+                </a>
+            </li>
+
+            <li class="border-top border-secondary pt-3 mb-2">
+                <small class="text-uppercase text-muted fw-bold px-2 tracking-wider" style="font-size: 0.75rem;">
+                    <i class="bi bi-folder2-open me-1"></i> Danh sách dự án
+                </small>
+            </li>
+
+            <li th:if="${#lists.isEmpty(projects)}" class="px-2 py-1">
+                <span class="text-muted small italic">Chưa có dự án nào</span>
+            </li>
+
+            <li th:each="p : ${projects}" class="nav-item mb-1">
+                <a th:href="@{/tasks(projectId=${p.projectId})}" 
+                   class="nav-link text-light text-truncate d-flex align-items-center gap-2"
+                   th:title="${p.projectName}">
+                    <i class="bi bi-folder text-warning"></i>
+                    <span th:text="${p.projectName}">Tên Project</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="dropdown border-top border-secondary pt-3" sec:authorize="isAuthenticated()">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-5 me-2 text-info"></i>
+                <strong class="text-truncate" style="max-width: 150px;" sec:authentication="name">User</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
+                <li>
+                    <span class="dropdown-item-text text-warning small">
+                        Quyền: <span sec:authentication="principal.authorities">Role</span>
+                    </span>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger d-flex align-items-center gap-2" th:href="@{/logout}">
+                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

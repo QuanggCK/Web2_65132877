@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Công Việc - TaskManager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .main-wrapper {
+            min-height: calc(100vh - 56px);
+        }
+        .detail-card, .comment-card {
+            border-radius: 12px;
+            border: none;
+        }
+        .comment-item {
+            border-left: 3px solid #0dcaf0;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div th:replace="~{fragments/header :: header-nav}"></div>
+
+    <div class="d-flex main-wrapper">
+        
+        <div th:replace="~{fragments/sidebar :: sidebar-nav}"></div>
+        
+        <div class="flex-grow-1 p-4">
+            <div class="container-fluid" style="max-width: 1000px;">
+                
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/tasks}" class="text-info text-decoration-none">Công việc</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Chi tiết</li>
+                    </ol>
+                </nav>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card detail-card shadow-sm p-4 bg-white mb-4">
+                            
+                            <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+                                <div>
+                                    <span class="text-muted small fw-bold" th:text="'MÃ CÔNG VIỆC #' + ${task.taskId}">#1</span>
+                                    <h2 class="fw-bold text-dark mt-1 mb-2" th:text="${task.title}">Tiêu đề công việc mẫu</h2>
+                                    <p class="mb-0 small text-secondary">
+                                        <i class="bi bi-folder-fill text-warning me-1"></i> Dự án: 
+                                        <strong th:text="${task.project != null ? task.project.projectName : 'Không rõ'}">Dự án mẫu</strong>
+                                    </p>
+                                </div>
+                                <a th:href="@{/tasks/edit/{id}(id=${task.taskId})}" class="btn btn-outline-warning btn-sm fw-semibold">
+                                    <i class="bi bi-pencil shadow-sm"></i> Chỉnh sửa
+                                </a>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="fw-bold text-secondary text-uppercase small mb-2">Mô tả nội dung:</h6>
+                                <div class="p-3 bg-light rounded text-dark" style="white-space: pre-line; min-height: 120px;"
+                                     th:text="${task.description != null && !task.description.isEmpty() ? task.description : 'Không có mô tả chi tiết cho công việc này.'}">
+                                    Nội dung chi tiết của công việc...
+                                </div>
+                            </div>
+
+                            <div class="row g-3 border-top pt-3">
+                                <div class="col-6 col-sm-3">
+                                    <span class="text-muted small d-block">Ngày bắt đầu</span>
+                                    <strong class="text-dark" th:text="${task.startDate != null ? #dates.format(task.startDate, 'dd/MM/yyyy') : '--/--/----'}">01/01/2026</strong>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <span class="text-muted small d-block">Hạn chót (Deadline)</span>
+                                    <strong class="text-danger" th:text="${task.deadline != null ? #dates.format(task.deadline, 'dd/MM/yyyy') : '--/--/----'}">15/01/2026</strong>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <span class="text-muted small d-block">Người tạo</span>
+                                    <strong class="text-dark" th:text="${task.createdBy != null ? task.createdBy.fullName : 'Hệ thống'}">Admin</strong>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <span class="text-muted small d-block">Phân công cho</span>
+                                    <span class="badge bg-secondary bg-opacity-10 text-dark border px-2 py-1 mt-1" 
+                                          th:text="${task.assignedTo != null ? task.assignedTo.fullName : 'Chưa giao ai'}">Chưa giao ai</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card comment-card shadow-sm p-4 bg-white">
+                            <h5 class="fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+                                <i class="bi bi-chat-left-text-fill text-info"></i>
+                                Thảo luận (<span th:text="${#lists.size(comments)}">0</span>)
+                            </h5>
+
+                            <form th:action="@{/tasks/{id}/comment(id=${task.taskId})}" method="post" class="mb-4">
+                                <div class="mb-3">
+                                    <textarea name="content" class="form-control" rows="3" placeholder="Nhập nội dung trao đổi hoặc tiến độ cập nhật tại đây..." required></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-info text-white fw-bold btn-sm px-3 shadow-sm">
+                                        <i class="bi bi-send-fill me-1"></i> Gửi bình luận
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="comment-list">
+                                <div th:if="${#lists.isEmpty(comments)}" class="text-center py-4 text-muted small">
+                                    Chưa có thảo luận nào cho công việc này. Hãy để lại ý kiến của bạn!
+                                </div>
+                                
+                                <div th:each="comment : ${comments}" class="comment-item p-3 rounded mb-3 shadow-xs">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="fw-bold text-dark small" th:text="${comment.user != null ? comment.user.fullName : 'Người dùng ẩn danh'}">Nguyễn Văn A</span>
+                                        <span class="text-muted style-date" style="font-size: 0.75rem;" 
+                                              th:text="${comment.createdAt != null ? #dates.format(comment.createdAt, 'dd/MM/yyyy HH:mm') : ''}">31/05/2026 14:30</span>
+                                    </div>
+                                    <p class="mb-0 text-secondary small" style="white-space: pre-line;" th:text="${comment.content}">Nội dung bình luận...</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card detail-card shadow-sm p-4 bg-white text-center">
+                            
+                            <div class="mb-4">
+                                <span class="text-muted small d-block mb-2 fw-semibold text-uppercase">Trạng thái công việc</span>
+                                <div th:if="${task.status != null}">
+                                    <span th:classappend="${task.status.statusName == 'Open' || task.status.statusName == 'Mới' ? 'bg-primary' : 
+                                                           task.status.statusName == 'In Progress' || task.status.statusName == 'Đang làm' ? 'bg-warning text-dark' : 
+                                                           task.status.statusName == 'Done' || task.status.statusName == 'Hoàn thành' ? 'bg-success' : 'bg-secondary'}"
+                                          class="badge fs-5 px-4 py-2 shadow-sm w-100" 
+                                          th:text="${task.status.statusName}">Open</span>
+                                </div>
+                                <div th:if="${task.status == null}">
+                                    <span class="badge bg-light text-muted border fs-5 px-4 py-2 w-100">Chưa xác định</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <span class="text-muted small d-block mb-2 fw-semibold text-uppercase">Mức độ ưu tiên</span>
+                                <span th:if="${task.priority == 'HIGH' || task.priority == 'Cao'}" class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-50 fs-6 px-3 py-2 w-100">Cao</span>
+                                <span th:if="${task.priority == 'MEDIUM' || task.priority == 'Trung bình'}" class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-50 fs-6 px-3 py-2 text-dark w-100">Trung bình</span>
+                                <span th:if="${task.priority == 'LOW' || task.priority == 'Thấp'}" class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-50 fs-6 px-3 py-2 w-100">Thấp</span>
+                                <span th:if="${task.priority != 'HIGH' && task.priority != 'Cao' && task.priority != 'MEDIUM' && task.priority != 'Trung bình' && task.priority != 'LOW' && task.priority != 'Thấp'}" 
+                                      class="badge bg-secondary text-white fs-6 px-3 py-2 w-100" th:text="${task.priority}">Thường</span>
+                            </div>
+
+                            <div class="border-top pt-3 mt-2">
+                                <a th:href="@{/tasks}" class="btn btn-light border w-100 fw-semibold text-secondary btn-sm">
+                                    <i class="bi bi-arrow-left-circle me-1"></i> Quay lại danh sách
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
