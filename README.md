@@ -89,7 +89,7 @@ Dự án được thiết kế theo mô hình kiến trúc phân tầng tiêu ch
        |                 CƠ SỞ DỮ LIỆU (DATABASE)              |
        |  - MySQL Server (Lưu trữ Users, Projects, Tasks,...)  |
        +-------------------------------------------------------+
-text```
+```
 ---
 
 ## 6. Cấu trúc chi tiết thư mục dự án
@@ -154,9 +154,9 @@ src/
 │               ├── edit.html                    # Trang chứa form cập nhật tiến độ, sửa đổi công việc
 │               └── detail.html                  # Trang chi tiết công việc (Hiển thị đầy đủ mô tả, bảng thông tin và khung chat thảo luận)
 
-text```
+```
 
-# 🚀 Hướng dẫn chạy dự án
+# 🚀7. Hướng dẫn chạy dự án
 
 ## 🛠️ Yêu cầu chuẩn bị trước khi cài đặt
 
@@ -367,6 +367,4 @@ Nếu mọi bước đều thực hiện thành công, hệ thống Task Manager
 ```text
 http://localhost:8080
 ```
-
-Chúc bạn sử dụng dự án hiệu quả! 🎉
 
