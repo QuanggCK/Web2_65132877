@@ -36,10 +36,57 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
     ![Chi tiết công việc và Bình luận](Images/task_detail.png)
 
 ---
-
 ## 5. Sơ đồ kiến trúc hệ thống
-Dự án áp dụng mô hình kiến trúc chuẩn **MVC (Model-View-Controller)** kết hợp tầng **Service** và **Repository** nhằm tách biệt hoàn toàn mã nguồn xử lý logic và hiển thị:
 
+Dự án được thiết kế theo mô hình kiến trúc phân tầng tiêu chuẩn, kết hợp giữa mô hình **MVC (Model-View-Controller)** ở tầng giao diện và kiến trúc dịch vụ (**Service-Repository**) ở tầng xử lý nghiệp vụ nhằm đảm bảo tính độc lập, dễ bảo trì và mở rộng dữ liệu.
+
+```mermaid
+graph TD
+    %% Định nghĩa các Client/User
+    User([Người dùng / Trình duyệt]) <--> |HTTP Request / Response| View
+    
+    %% Tầng Giao diện (Presentation Layer)
+    subgraph Giao diện (Presentation Layer)
+        View[Thymeleaf Templates <br> HTML5 / Bootstrap 5]
+    end
+
+    %% Tầng Điều hướng và Bảo mật
+    View <--> |Controller Mapping| Controller
+    subgraph Điều phối & Bảo mật (Security & Controller)
+        Security[Spring Security <br> Filter Chain]
+        Controller[Spring Controllers <br> Task / Project / Auth]
+        Security -.-> |Xác thực & Phân quyền| Controller
+    end
+
+    %% Tầng Nghiệp vụ (Business Layer)
+    Controller <--> |Service Calls| Service
+    subgraph Nghiệp vụ (Business Service Layer)
+        Service[Service Components <br> TaskService / UserService /... ]
+    end
+
+    %% Tầng Dữ liệu (Data Access Layer)
+    Service <--> |Data Mapping| Repo
+    subgraph Truy cập dữ liệu (Data Access Layer)
+        Repo[Spring Data JPA <br> Repositories]
+    end
+
+    %% Tầng Cơ sở dữ liệu (Database Layer)
+    Repo <--> |SQL Queries / JDBC| DB[(MySQL Database)]
+
+    %% Định nghĩa phong cách màu sắc cho các khối
+    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef view fill:#d1e7dd,stroke:#0f5132,stroke-width:1px;
+    classDef control fill:#cff4fc,stroke:#055160,stroke-width:1px;
+    classDef service fill:#fff3cd,stroke:#664d03,stroke-width:1px;
+    classDef repo fill:#f8d7da,stroke:#842029,stroke-width:1px;
+    classDef db fill:#e2e3e5,stroke:#383d41,stroke-width:2px;
+
+    class User client;
+    class View view;
+    class Security,Controller control;
+    class Service service;
+    class Repo repo;
+    class DB db;
 
 
 ---
