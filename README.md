@@ -46,32 +46,35 @@ graph TD
     User([Người dùng / Trình duyệt]) <--> |HTTP Request / Response| View
     
     %% Tầng Giao diện (Presentation Layer)
-    subgraph Giao diện (Presentation Layer)
+    subgraph ViewLayer ["Giao diện (Presentation Layer)"]
         View[Thymeleaf Templates <br> HTML5 / Bootstrap 5]
     end
 
     %% Tầng Điều hướng và Bảo mật
-    View <--> |Controller Mapping| Controller
-    subgraph Điều phối & Bảo mật (Security & Controller)
+    subgraph ControlLayer ["Điều phối & Bảo mật (Security & Controller)"]
         Security[Spring Security <br> Filter Chain]
         Controller[Spring Controllers <br> Task / Project / Auth]
         Security -.-> |Xác thực & Phân quyền| Controller
     end
 
     %% Tầng Nghiệp vụ (Business Layer)
-    Controller <--> |Service Calls| Service
-    subgraph Nghiệp vụ (Business Service Layer)
+    subgraph ServiceLayer ["Nghiệp vụ (Business Service Layer)"]
         Service[Service Components <br> TaskService / UserService /... ]
     end
 
     %% Tầng Dữ liệu (Data Access Layer)
-    Service <--> |Data Mapping| Repo
-    subgraph Truy cập dữ liệu (Data Access Layer)
+    subgraph RepoLayer ["Truy cập dữ liệu (Data Access Layer)"]
         Repo[Spring Data JPA <br> Repositories]
     end
 
     %% Tầng Cơ sở dữ liệu (Database Layer)
-    Repo <--> |SQL Queries / JDBC| DB[(MySQL Database)]
+    DB[(MySQL Database)]
+
+    %% Thiết lập luồng kết nối giữa các subgraph
+    View <--> |Controller Mapping| Controller
+    Controller <--> |Service Calls| Service
+    Service <--> |Data Mapping| Repo
+    Repo <--> |SQL Queries / JDBC| DB
 
     %% Định nghĩa phong cách màu sắc cho các khối
     classDef client fill:#f9f,stroke:#333,stroke-width:2px;
@@ -87,7 +90,6 @@ graph TD
     class Service service;
     class Repo repo;
     class DB db;
-
 
 ---
 
