@@ -40,56 +40,55 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
 
 Dự án được thiết kế theo mô hình kiến trúc phân tầng tiêu chuẩn, kết hợp giữa mô hình **MVC (Model-View-Controller)** ở tầng giao diện và kiến trúc dịch vụ (**Service-Repository**) ở tầng xử lý nghiệp vụ nhằm đảm bảo tính độc lập, dễ bảo trì và mở rộng dữ liệu.
 
-```mermaid
-graph TD
-    %% Định nghĩa các Client/User
-    User([Người dùng / Trình duyệt]) <--> |HTTP Request / Response| View
-    
-    %% Tầng Giao diện (Presentation Layer)
-    subgraph ViewLayer ["Giao diện (Presentation Layer)"]
-        View[Thymeleaf Templates <br> HTML5 / Bootstrap 5]
-    end
-
-    %% Tầng Điều hướng và Bảo mật
-    subgraph ControlLayer ["Điều phối & Bảo mật (Security & Controller)"]
-        Security[Spring Security <br> Filter Chain]
-        Controller[Spring Controllers <br> Task / Project / Auth]
-        Security -.-> |Xác thực & Phân quyền| Controller
-    end
-
-    %% Tầng Nghiệp vụ (Business Layer)
-    subgraph ServiceLayer ["Nghiệp vụ (Business Service Layer)"]
-        Service[Service Components <br> TaskService / UserService /... ]
-    end
-
-    %% Tầng Dữ liệu (Data Access Layer)
-    subgraph RepoLayer ["Truy cập dữ liệu (Data Access Layer)"]
-        Repo[Spring Data JPA <br> Repositories]
-    end
-
-    %% Tầng Cơ sở dữ liệu (Database Layer)
-    DB[(MySQL Database)]
-
-    %% Thiết lập luồng kết nối giữa các subgraph
-    View <--> |Controller Mapping| Controller
-    Controller <--> |Service Calls| Service
-    Service <--> |Data Mapping| Repo
-    Repo <--> |SQL Queries / JDBC| DB
-
-    %% Định nghĩa phong cách màu sắc cho các khối
-    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef view fill:#d1e7dd,stroke:#0f5132,stroke-width:1px;
-    classDef control fill:#cff4fc,stroke:#055160,stroke-width:1px;
-    classDef service fill:#fff3cd,stroke:#664d03,stroke-width:1px;
-    classDef repo fill:#f8d7da,stroke:#842029,stroke-width:1px;
-    classDef db fill:#e2e3e5,stroke:#383d41,stroke-width:2px;
-
-    class User client;
-    class View view;
-    class Security,Controller control;
-    class Service service;
-    class Repo repo;
-    class DB db;
+```text
++-------------------------------------------------------+
+       |               Trình duyệt / Người dùng                |
+       +------------------------------------------+------------+
+                                                  |
+                                    HTTP Request  |  HTTP Response
+                                    (Form, JSON)  |  (HTML, Thymeleaf)
+                                                  v
+       +-------------------------------------------------------+
+       |             TẦNG GIAO DIỆN (PRESENTATION LAYER)        |
+       |  - Thymeleaf Templates (HTML5, Bootstrap 5)           |
+       +------------------------------------------+------------+
+                                                  |
+                                                  v
+       +-------------------------------------------------------+
+       |              BỘ LỌC BẢO MẬT (SPRING SECURITY)         |
+       |  - Xác thực tài khoản (Authentication)                |
+       |  - Phân quyền ADMIN / USER (Authorization)            |
+       +------------------------------------------+------------+
+                                                  |
+                                                  v
+       +-------------------------------------------------------+
+       |             TẦNG ĐIỀU HƯỚNG (CONTROLLER LAYER)        |
+       |  - AuthController       - ProjectController           |
+       |  - TaskController       - HomeController              |
+       +------------------------------------------+------------+
+                                                  |
+                                    Service Calls | Data Mapping
+                                                  v
+       +-------------------------------------------------------+
+       |              TẦNG NGHIỆP VỤ (SERVICE LAYER)           |
+       |  - UserService          - ProjectService              |
+       |  - TaskService          - CommentService              |
+       +------------------------------------------+------------+
+                                                  |
+                                    Data Mapping  | Repositories Queries
+                                                  v
+       +-------------------------------------------------------+
+       |             TẦNG TRUY CẬP DỮ LIỆU (REPOSITORY LAYER)  |
+       |  - Spring Data JPA Interfaces                         |
+       |  - UserRepository, TaskRepository, CommentRepository  |
+       +------------------------------------------+------------+
+                                                  |
+                                     SQL Queries  | JDBC Results
+                                                  v
+       +-------------------------------------------------------+
+       |                 CƠ SỞ DỮ LIỆU (DATABASE)              |
+       |  - MySQL Server (Lưu trữ Users, Projects, Tasks,...)  |
+       +-------------------------------------------------------+
 
 ---
 
