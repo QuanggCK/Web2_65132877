@@ -39,3 +39,69 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
 
 ## 5. Sơ đồ kiến trúc hệ thống
 Dự án áp dụng mô hình kiến trúc chuẩn **MVC (Model-View-Controller)** kết hợp tầng **Service** và **Repository** nhằm tách biệt hoàn toàn mã nguồn xử lý logic và hiển thị:
+
+
+
+---
+
+## 6. Cấu trúc chi tiết thư mục dự án
+```text
+src/
+├── main/
+│   ├── java/
+│   │   └── clc65/
+│   │       └── quanggck/
+│   │           ├── TaskManagerApplication.java  # File khởi chạy chính của ứng dụng Spring Boot
+│   │           │
+│   │           ├── config/                      # Cấu hình hệ thống & Bảo mật
+│   │           │   └── SecurityConfig.java      # Cấu hình Spring Security (Phân quyền ADMIN/USER, Login/Logout)
+│   │           │
+│   │           ├── controllers/                 # Tầng tiếp nhận Request từ trình duyệt và điều hướng View
+│   │           │   ├── HomeController.java      # Điều hướng trang chủ, bảng điều khiển chung
+│   │           │   ├── AuthController.java      # Xử lý Đăng nhập, Đăng ký tài khoản
+│   │           │   ├── ProjectController.java   # Quản lý định tuyến Dự án (Xem, thêm, sửa, xóa dự án)
+│   │           │   └── TaskController.java      # Quản lý định tuyến Công việc & Bình luận (Xem, thêm, sửa, xóa, comment)
+│   │           │
+│   │           ├── models/                      # Tầng chứa các Entity định nghĩa cấu trúc bảng Database
+│   │           │   ├── User.java                # Thông tin tài khoản, vai trò (Role)
+│   │           │   ├── Project.java             # Thông tin dự án
+│   │           │   ├── Task.java                # Thông tin chi tiết công việc, mức độ ưu tiên, hạn chót
+│   │           │   ├── TaskStatus.java          # Định nghĩa trạng thái công việc (Mới, Đang làm, Hoàn thành)
+│   │           │   └── Comment.java             # Thông tin nội dung thảo luận, thời gian tạo bình luận
+│   │           │
+│   │           ├── repos/                       # Tầng tương tác trực tiếp, truy vấn dữ liệu từ MySQL (JPA)
+│   │           │   ├── UserRepository.java      # Tìm kiếm user, kiểm tra trùng lặp email/username
+│   │           │   ├── ProjectRepository.java   # Truy vấn danh sách dự án
+│   │           │   ├── TaskRepository.java      # Tìm kiếm, lọc danh sách công việc
+│   │           │   ├── TaskStatusRepository.java# Truy vấn danh mục trạng thái
+│   │           │   └── CommentRepository.java   # Lấy danh sách bình luận theo Task ID
+│   │           │
+│   │           └── services/                    # Tầng xử lý logic nghiệp vụ xử lý dữ liệu trung gian
+│   │               ├── UserService.java         # Logic xử lý thông tin người dùng, lấy user đăng nhập hiện tại
+│   │               ├── ProjectService.java      # Logic tính toán, xử lý thông tin dự án
+│   │               ├── TaskService.java         # Logic phân công công việc, kiểm tra hạn chót
+│   │               ├── TaskStatusService.java   # Cung cấp danh mục trạng thái tiến độ
+│   │               └── CommentService.java      # Logic kiểm tra, lưu trữ các bình luận hợp lệ
+│   │
+│   └── resources/
+│       ├── application.properties               # File cấu hình cấu hình Port, chuỗi kết nối MySQL DB, mã hóa
+│       │
+│       ├── static/                              # Chứa tài nguyên tĩnh của hệ thống (Trình duyệt tải trực tiếp)
+│       │     
+│       └── templates/                           # Thư mục chứa toàn bộ giao diện HTML của hệ thống (Thymeleaf Engine)
+│           ├── login.html                       # Giao diện form Đăng nhập tài khoản
+│           │
+│           ├── fragments/                       # Các thành phần giao diện dùng chung được tái sử dụng
+│           │   ├── header.html                  # Thanh điều hướng phía trên cùng (Navbar, Thông tin User, Đăng xuất)
+│           │   └── sidebar.html                 # Thanh trình đơn bên trái (Menu chuyển tab Dự án, Công việc, Tài khoản)
+│           │
+│           ├── project/                         # Thư mục chứa bộ giao diện quản trị Dự án
+│           │   ├── list.html                    # Trang hiển thị danh sách toàn bộ dự án hiện có
+│           │   ├── add.html                     # Trang chứa form tạo dự án mới (Chỉ Admin nhìn thấy)
+│           │   └── edit.html                    # Trang chứa form cập nhật thông tin dự án
+│           │
+│           └── task/                            # Thư mục chứa bộ giao diện quản trị Công việc
+│               ├── list.html                    # Trang hiển thị danh sách công việc (Có hiển thị huy hiệu ưu tiên, trạng thái)
+│               ├── add.html                     # Trang chứa form tạo và phân công công việc mới
+│               ├── edit.html                    # Trang chứa form cập nhật tiến độ, sửa đổi công việc
+│               └── detail.html                  # Trang chi tiết công việc (Hiển thị đầy đủ mô tả, bảng thông tin và khung chat thảo luận)
