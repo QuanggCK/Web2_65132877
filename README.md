@@ -1,4 +1,5 @@
-
+Link Demo: https://youtu.be/AW8ZxwW2V4Y
+---
 ## 1. Mô tả ứng dụng
 Ứng dụng **TaskManager** là nền tảng quản trị được thiết kế nhằm giúp các doanh nghiệp và đội ngũ tối ưu hóa quy trình theo dõi tiến độ công việc. Hệ thống cho phép khởi tạo dự án, phân công nhiệm vụ cụ thể cho từng thành viên, đồng thời cập nhật trạng thái và trao đổi trực tiếp thông qua luồng bình luận thời gian thực. Nhờ đó, người quản lý dễ dàng kiểm soát thời hạn (deadline) và mức độ ưu tiên của mọi hạng mục, giúp nâng cao hiệu suất làm việc nhóm.
 
