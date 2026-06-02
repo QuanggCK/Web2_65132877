@@ -26,12 +26,15 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/login",
-                    "/register",
-                    "/css/**",
-                    "/js/**"
-                ).permitAll()
+            		.requestMatchers(
+            			    "/login",
+            			    "/css/**",
+            			    "/js/**",
+            			    "/tm.png",
+            			    "/**/*.png",
+            			    "/**/*.jpg",
+            			    "/**/*.jpeg"
+            			).permitAll()
 
                 .anyRequest().authenticated()
             )

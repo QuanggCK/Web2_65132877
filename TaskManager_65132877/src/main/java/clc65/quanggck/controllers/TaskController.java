@@ -58,10 +58,32 @@ public class TaskController {
         return "task/add";
     }
 
-    // 3. Lưu công việc mới
-    @PostMapping("/save")
-    public String saveTask(@ModelAttribute Task task) {
+ // 3. Lưu công việc mới
+    @PostMapping("/save") 
+    public String saveTask(@ModelAttribute Task task, Principal principal) {
+        
+        // 1. Kiểm tra và gán người tạo công việc (Đã xử lý ở bước trước)
+        if (principal != null) {
+            String username = principal.getName();
+            User currentUser = userService.getByUsername(username);
+            task.setCreatedBy(currentUser);
+        } else {
+            return "redirect:/login";
+        }
+        
+        if (task.getStatus() == null) {
+            java.util.List<clc65.quanggck.models.TaskStatus> statuses = taskStatusService.getAll();
+            if (statuses != null && !statuses.isEmpty()) {
+    
+                task.setStatus(statuses.get(0)); 
+            }
+
+        }
+        
+        // 3. Tiến hành lưu công việc hợp lệ xuống Database
         taskService.save(task);
+        
+        // 4. Điều hướng về danh sách công việc
         return "redirect:/tasks";
     }
 

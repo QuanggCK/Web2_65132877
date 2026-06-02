@@ -15,7 +15,7 @@ import java.security.Principal;
 import java.sql.Timestamp;
 
 @Controller
-@RequestMapping("/projects")
+@RequestMapping("/projects") 
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -23,7 +23,6 @@ public class ProjectController {
     private final ProjectMemberService projectMemberService;
     private final TaskService taskService;
 
-    // Inject thêm các service bổ trợ để quản lý thành viên, công việc và user đăng nhập
     public ProjectController(ProjectService projectService, 
                              UserService userService,
                              ProjectMemberService projectMemberService,
@@ -48,15 +47,13 @@ public class ProjectController {
         return "project/add";
     }
 
-    // 3. Lưu dự án mới (Đã tối ưu: Tự động gán Người tạo & Ngày tạo từ hệ thống)
+    // 3. Lưu dự án mới
     @PostMapping("/save")
     public String saveProject(@ModelAttribute Project project, Principal principal) {
         if (principal != null) {
-            // Lấy username của người đang đăng nhập hệ thống hiện tại
             String username = principal.getName();
             User currentUser = userService.getByUsername(username);
             
-            // Thiết lập thông tin ẩn trước khi lưu xuống database
             project.setCreatedBy(currentUser);
             project.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         }
@@ -65,8 +62,8 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-    // 4. Form sửa thông tin dự án
-    @GetMapping("/projects/edit/{id}")
+    // 4. Form sửa thông tin dự án (ĐÃ SỬA: Xóa chữ /projects thừa)
+    @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Project project = projectService.getProjectById(id);
 
@@ -78,7 +75,7 @@ public class ProjectController {
         return "project/edit";
     }
 
-    // 5. Cập nhật thông tin dự án (Giữ nguyên cơ chế bảo toàn dữ liệu cũ của bạn)
+    // 5. Cập nhật thông tin dự án
     @PostMapping("/update")
     public String updateProject(@ModelAttribute Project project) {
         Project oldProject = projectService.getProjectById(project.getProjectId());
@@ -87,7 +84,6 @@ public class ProjectController {
             return "redirect:/projects";
         }
 
-        // Chỉ cập nhật những trường được thay đổi từ Form giao diện
         oldProject.setProjectName(project.getProjectName());
         oldProject.setDescription(project.getDescription());
 
@@ -95,16 +91,16 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-    // 6. Xóa dự án
-    @GetMapping("/projects/delete/{id}")
+    // 6. Xóa dự án (ĐÃ SỬA: Xóa chữ /projects thừa)
+    @GetMapping("/delete/{id}")
     public String deleteProject(@PathVariable("id") Integer id) {
-        projectService.delete(id);
-        return "redirect:/projects";
+        projectService.delete(id); 
+        return "redirect:/projects"; 
     }
-
-    // 7. TÍNH NĂNG MỚI: Chi tiết dự án (Hiển thị Thành viên và các Công việc liên quan)
+    
+    // 7. Chi tiết dự án (ĐÃ SỬA: Bổ sung định danh "id" để không bị lỗi 500)
     @GetMapping("/{id}")
-    public String detailProject(@PathVariable Integer id, Model model) {
+    public String detailProject(@PathVariable("id") Integer id, Model model) {
         Project project = projectService.getProjectById(id);
 
         if (project == null) {
@@ -112,11 +108,7 @@ public class ProjectController {
         }
 
         model.addAttribute("project", project);
-        
-        // Nạp danh sách thành viên thuộc dự án sang trang project/detail.html
         model.addAttribute("members", projectMemberService.getByProject(project));
-        
-        // Nạp danh sách các công việc (tasks) thuộc dự án này sang trang detail
         model.addAttribute("tasks", taskService.getByProject(project));
 
         return "project/detail";
