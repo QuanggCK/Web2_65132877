@@ -1,4 +1,5 @@
-
+Link Demo: https://youtu.be/AW8ZxwW2V4Y
+---
 ## 1. Mô tả ứng dụng
 Ứng dụng **TaskManager** là nền tảng quản trị được thiết kế nhằm giúp các doanh nghiệp và đội ngũ tối ưu hóa quy trình theo dõi tiến độ công việc. Hệ thống cho phép khởi tạo dự án, phân công nhiệm vụ cụ thể cho từng thành viên, đồng thời cập nhật trạng thái và trao đổi trực tiếp thông qua luồng bình luận thời gian thực. Nhờ đó, người quản lý dễ dàng kiểm soát thời hạn (deadline) và mức độ ưu tiên của mọi hạng mục, giúp nâng cao hiệu suất làm việc nhóm.
 
@@ -24,16 +25,35 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
 ---
 
 ## 4. Hình ảnh giao diện hệ thống
-*Dưới đây là các hình ảnh minh họa giao diện, bạn có thể bổ sung các file ảnh này vào thư mục `Images/` trong kho lưu trữ của mình.*
 
-* **Trang đăng nhập hệ thống:**
-    ![Giao diện Đăng nhập](Images/login_screen.png)
-* **Danh sách quản lý dự án (Dành cho Admin):**
-    ![Danh sách dự án](Images/project_list.png)
-* **Danh sách công việc & Tiến độ:**
-    ![Danh sách công việc](Images/task_list.png)
-* **Chi tiết công việc & Khung thảo luận:**
-    ![Chi tiết công việc và Bình luận](Images/task_detail.png)
+*Dưới đây là các hình ảnh minh họa thực tế các chức năng của hệ thống (Ảnh được lưu trữ trực tiếp trong thư mục tài nguyên tĩnh `static` của dự án):*
+
+* **Giao diện Đăng nhập hệ thống:**
+<img width="1919" height="1087" alt="login" src="https://github.com/user-attachments/assets/e847a187-a943-408f-9707-a166f94f14ac" />
+
+
+* **Danh sách hiển thị tất cả Dự án (Giao diện chung):**
+<img width="1555" height="970" alt="userpj" src="https://github.com/user-attachments/assets/e13b9581-103e-426b-b0e7-6ae1759bc4f3" />
+
+
+* **Giao diện Thêm mới dự án (Dành cho Admin):**
+<img width="1569" height="1038" alt="addpj" src="https://github.com/user-attachments/assets/51d96030-9275-45e9-a99b-1be0d998f3cd" />
+
+
+* **Giao diện Cập nhật thông tin dự án:**
+<img width="1539" height="1038" alt="updatepj" src="https://github.com/user-attachments/assets/c04da7d9-97df-48b8-8919-284431c5c33a" />
+
+
+* **Giao diện xem danh sách dự án dành riêng cho Nhân viên:**
+<img width="1555" height="970" alt="userpj" src="https://github.com/user-attachments/assets/e13b9581-103e-426b-b0e7-6ae1759bc4f3" />
+
+* **Danh sách hiển thị tất cả Công việc (Nhiệm vụ):**
+<img width="1566" height="965" alt="task" src="https://github.com/user-attachments/assets/c2c4343c-594d-4b06-a6a7-e77a151f9230" />
+
+
+* **Chi tiết công việc & Khung bình luận thảo luận tương tác:**
+<img width="1567" height="1033" alt="cmt" src="https://github.com/user-attachments/assets/60c0e899-b33a-4a73-b681-fd99b4b92cd8" />
+
 
 ---
 ## 5. Sơ đồ kiến trúc hệ thống
