@@ -29,32 +29,31 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
 *Dưới đây là các hình ảnh minh họa thực tế các chức năng của hệ thống (Ảnh được lưu trữ trực tiếp trong thư mục tài nguyên tĩnh `static` của dự án):*
 
 * **Giao diện Đăng nhập hệ thống:**
-  <br>
-  <img src="./src/main/resources/static/login.png" width="750" alt="Giao diện Đăng nhập">
+<img width="1919" height="1087" alt="login" src="https://github.com/user-attachments/assets/e847a187-a943-408f-9707-a166f94f14ac" />
+
 
 * **Danh sách hiển thị tất cả Dự án (Giao diện chung):**
-  <br>
-  <img src="./src/main/resources/static/project.png" width="750" alt="Danh sách tất cả dự án">
+<img width="1555" height="970" alt="userpj" src="https://github.com/user-attachments/assets/e13b9581-103e-426b-b0e7-6ae1759bc4f3" />
+
 
 * **Giao diện Thêm mới dự án (Dành cho Admin):**
-  <br>
-  <img src="./src/main/resources/static/addpj.png" width="750" alt="Thêm mới dự án">
+<img width="1569" height="1038" alt="addpj" src="https://github.com/user-attachments/assets/51d96030-9275-45e9-a99b-1be0d998f3cd" />
+
 
 * **Giao diện Cập nhật thông tin dự án:**
-  <br>
-  <img src="./src/main/resources/static/updatepj.png" width="750" alt="Cập nhật dự án">
+<img width="1539" height="1038" alt="updatepj" src="https://github.com/user-attachments/assets/c04da7d9-97df-48b8-8919-284431c5c33a" />
+
 
 * **Giao diện xem danh sách dự án dành riêng cho Nhân viên:**
-  <br>
-  <img src="./src/main/resources/static/userpj.png" width="750" alt="Trang xem dự án của nhân viên">
+<img width="1555" height="970" alt="userpj" src="https://github.com/user-attachments/assets/e13b9581-103e-426b-b0e7-6ae1759bc4f3" />
 
 * **Danh sách hiển thị tất cả Công việc (Nhiệm vụ):**
-  <br>
-  <img src="./src/main/resources/static/task.png" width="750" alt="Danh sách tất cả nhiệm vụ">
+<img width="1566" height="965" alt="task" src="https://github.com/user-attachments/assets/c2c4343c-594d-4b06-a6a7-e77a151f9230" />
+
 
 * **Chi tiết công việc & Khung bình luận thảo luận tương tác:**
-  <br>
-  <img src="./src/main/resources/static/cmt.png" width="750" alt="Chi tiết công việc và Bình luận">
+<img width="1567" height="1033" alt="cmt" src="https://github.com/user-attachments/assets/60c0e899-b33a-4a73-b681-fd99b4b92cd8" />
+
 
 ---
 ## 5. Sơ đồ kiến trúc hệ thống
