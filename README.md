@@ -29,25 +29,32 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
 *Dưới đây là các hình ảnh minh họa thực tế các chức năng của hệ thống (Ảnh được lưu trữ trực tiếp trong thư mục tài nguyên tĩnh `static` của dự án):*
 
 * **Giao diện Đăng nhập hệ thống:**
-  ![Giao diện Đăng nhập](src/main/resources/static/login.png)
+  <br>
+  <img src="./src/main/resources/static/login.png" width="750" alt="Giao diện Đăng nhập">
 
 * **Danh sách hiển thị tất cả Dự án (Giao diện chung):**
-  ![Danh sách tất cả dự án](src/main/resources/static/project.png)
+  <br>
+  <img src="./src/main/resources/static/project.png" width="750" alt="Danh sách tất cả dự án">
 
 * **Giao diện Thêm mới dự án (Dành cho Admin):**
-  ![Thêm mới dự án](src/main/resources/static/addpj.png)
+  <br>
+  <img src="./src/main/resources/static/addpj.png" width="750" alt="Thêm mới dự án">
 
 * **Giao diện Cập nhật thông tin dự án:**
-  ![Cập nhật dự án](src/main/resources/static/updatepj.png)
+  <br>
+  <img src="./src/main/resources/static/updatepj.png" width="750" alt="Cập nhật dự án">
 
 * **Giao diện xem danh sách dự án dành riêng cho Nhân viên:**
-  ![Trang xem dự án của nhân viên](src/main/resources/static/userpj.png)
+  <br>
+  <img src="./src/main/resources/static/userpj.png" width="750" alt="Trang xem dự án của nhân viên">
 
 * **Danh sách hiển thị tất cả Công việc (Nhiệm vụ):**
-  ![Danh sách tất cả nhiệm vụ](src/main/resources/static/task.png)
+  <br>
+  <img src="./src/main/resources/static/task.png" width="750" alt="Danh sách tất cả nhiệm vụ">
 
 * **Chi tiết công việc & Khung bình luận thảo luận tương tác:**
-  ![Chi tiết công việc và Bình luận](src/main/resources/static/cmt.png)
+  <br>
+  <img src="./src/main/resources/static/cmt.png" width="750" alt="Chi tiết công việc và Bình luận">
 
 ---
 ## 5. Sơ đồ kiến trúc hệ thống
