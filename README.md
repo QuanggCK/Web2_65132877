@@ -24,16 +24,29 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
 ---
 
 ## 4. Hình ảnh giao diện hệ thống
-*Dưới đây là các hình ảnh minh họa giao diện, bạn có thể bổ sung các file ảnh này vào thư mục `Images/` trong kho lưu trữ của mình.*
 
-* **Trang đăng nhập hệ thống:**
-    ![Giao diện Đăng nhập](Images/login_screen.png)
-* **Danh sách quản lý dự án (Dành cho Admin):**
-    ![Danh sách dự án](Images/project_list.png)
-* **Danh sách công việc & Tiến độ:**
-    ![Danh sách công việc](Images/task_list.png)
-* **Chi tiết công việc & Khung thảo luận:**
-    ![Chi tiết công việc và Bình luận](Images/task_detail.png)
+*Dưới đây là các hình ảnh minh họa thực tế các chức năng của hệ thống (Ảnh được lưu trữ trực tiếp trong thư mục tài nguyên tĩnh `static` của dự án):*
+
+* **Giao diện Đăng nhập hệ thống:**
+  ![Giao diện Đăng nhập](src/main/resources/static/login.png)
+
+* **Danh sách hiển thị tất cả Dự án (Giao diện chung):**
+  ![Danh sách tất cả dự án](src/main/resources/static/project.png)
+
+* **Giao diện Thêm mới dự án (Dành cho Admin):**
+  ![Thêm mới dự án](src/main/resources/static/addpj.png)
+
+* **Giao diện Cập nhật thông tin dự án:**
+  ![Cập nhật dự án](src/main/resources/static/updatepj.png)
+
+* **Giao diện xem danh sách dự án dành riêng cho Nhân viên:**
+  ![Trang xem dự án của nhân viên](src/main/resources/static/userpj.png)
+
+* **Danh sách hiển thị tất cả Công việc (Nhiệm vụ):**
+  ![Danh sách tất cả nhiệm vụ](src/main/resources/static/task.png)
+
+* **Chi tiết công việc & Khung bình luận thảo luận tương tác:**
+  ![Chi tiết công việc và Bình luận](src/main/resources/static/cmt.png)
 
 ---
 ## 5. Sơ đồ kiến trúc hệ thống
