@@ -26,7 +26,8 @@ Dự án được xây dựng trên mô hình Full-Stack phổ biến với các
 
 ## 4. Hình ảnh giao diện hệ thống
 
-*Dưới đây là các hình ảnh minh họa thực tế các chức năng của hệ thống (Ảnh được lưu trữ trực tiếp trong thư mục tài nguyên tĩnh `static` của dự án):*
+* **Giao diện hiển thị thông báo:**
+<img width="1919" height="151" alt="notification" src="https://github.com/user-attachments/assets/d0635860-ea38-4f86-9469-5d12bb95057c" />
 
 * **Giao diện Đăng nhập hệ thống:**
 <img width="1919" height="1087" alt="login" src="https://github.com/user-attachments/assets/e847a187-a943-408f-9707-a166f94f14ac" />
@@ -124,32 +125,36 @@ src/
 │   │           ├── config/                      # Cấu hình hệ thống & Bảo mật
 │   │           │   └── SecurityConfig.java      # Cấu hình Spring Security (Phân quyền ADMIN/USER, Login/Logout)
 │   │           │
-│   │           ├── controllers/                 # Tầng tiếp nhận Request từ trình duyệt và điều hướng View
-│   │           │   ├── HomeController.java      # Điều hướng trang chủ, bảng điều khiển chung
-│   │           │   ├── AuthController.java      # Xử lý Đăng nhập, Đăng ký tài khoản
-│   │           │   ├── ProjectController.java   # Quản lý định tuyến Dự án (Xem, thêm, sửa, xóa dự án)
-│   │           │   └── TaskController.java      # Quản lý định tuyến Công việc & Bình luận (Xem, thêm, sửa, xóa, comment)
+│   │           ├── controllers/                         # Tầng tiếp nhận Request từ trình duyệt và điều hướng View
+│   │           │   ├── AuthController.java              # Xử lý Đăng nhập, Đăng ký tài khoản
+│   │           │   ├── ProjectController.java           # Quản lý định tuyến Dự án (Xem, thêm, sửa, xóa dự án)
+│   │           │   └── TaskController.java              # Quản lý định tuyến Công việc & Bình luận (Xem, thêm, sửa, xóa, comment)
+│   │           │   └── GlobalControllerAdvice.java      # Nạp dữ liệu tự động cho thông báo (Top 5 thông báo gần nhất)
 │   │           │
-│   │           ├── models/                      # Tầng chứa các Entity định nghĩa cấu trúc bảng Database
-│   │           │   ├── User.java                # Thông tin tài khoản, vai trò (Role)
-│   │           │   ├── Project.java             # Thông tin dự án
-│   │           │   ├── Task.java                # Thông tin chi tiết công việc, mức độ ưu tiên, hạn chót
-│   │           │   ├── TaskStatus.java          # Định nghĩa trạng thái công việc (Mới, Đang làm, Hoàn thành)
-│   │           │   └── Comment.java             # Thông tin nội dung thảo luận, thời gian tạo bình luận
+│   │           ├── models/                              # Tầng chứa các Entity định nghĩa cấu trúc bảng Database
+│   │           │   ├── User.java                        # Thông tin tài khoản, vai trò (Role)
+│   │           │   ├── Project.java                     # Thông tin dự án
+│   │           │   ├── Task.java                        # Thông tin chi tiết công việc, mức độ ưu tiên, hạn chót
+│   │           │   ├── TaskStatus.java                  # Định nghĩa trạng thái công việc (Mới, Đang làm, Hoàn thành)
+│   │           │   └── ProjectMember.java               # Thông tin các thành viên trong 1 dự án
+│   │           │   └── Notifiaction.java                # Thông báo về các thay đổi cập nhật (Thêm, sửa dự án).
+│   │           │   └── Comment.java                     # Thông tin nội dung thảo luận, thời gian tạo bình luận
 │   │           │
 │   │           ├── repos/                       # Tầng tương tác trực tiếp, truy vấn dữ liệu từ MySQL (JPA)
 │   │           │   ├── UserRepository.java      # Tìm kiếm user, kiểm tra trùng lặp email/username
 │   │           │   ├── ProjectRepository.java   # Truy vấn danh sách dự án
 │   │           │   ├── TaskRepository.java      # Tìm kiếm, lọc danh sách công việc
 │   │           │   ├── TaskStatusRepository.java# Truy vấn danh mục trạng thái
-│   │           │   └── CommentRepository.java   # Lấy danh sách bình luận theo Task ID
+│   │           │   ├── CommentRepository.java   # Lấy danh sách bình luận theo Task ID
+│   │           │   └── NotificationRepository.java# Truy vấn danh mục thông báo
 │   │           │
-│   │           └── services/                    # Tầng xử lý logic nghiệp vụ xử lý dữ liệu trung gian
-│   │               ├── UserService.java         # Logic xử lý thông tin người dùng, lấy user đăng nhập hiện tại
-│   │               ├── ProjectService.java      # Logic tính toán, xử lý thông tin dự án
-│   │               ├── TaskService.java         # Logic phân công công việc, kiểm tra hạn chót
-│   │               ├── TaskStatusService.java   # Cung cấp danh mục trạng thái tiến độ
-│   │               └── CommentService.java      # Logic kiểm tra, lưu trữ các bình luận hợp lệ
+│   │           └── services/                      # Tầng xử lý logic nghiệp vụ xử lý dữ liệu trung gian
+│   │               ├── UserService.java           # Logic xử lý thông tin người dùng, lấy user đăng nhập hiện tại
+│   │               ├── ProjectService.java        # Logic tính toán, xử lý thông tin dự án
+│   │               ├── TaskService.java           # Logic phân công công việc, kiểm tra hạn chót
+│   │               ├── TaskStatusService.java     # Cung cấp danh mục trạng thái tiến độ
+│   │               ├── NotificationService.java   # Cung cấp danh sách top 5 thông báo thay đổi gần nhấtnhất
+│   │               └── CommentService.java        # Logic kiểm tra, lưu trữ các bình luận hợp lệ
 │   │
 │   └── resources/
 │       ├── application.properties               # File cấu hình cấu hình Port, chuỗi kết nối MySQL DB, mã hóa
