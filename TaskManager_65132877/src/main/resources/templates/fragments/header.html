@@ -32,6 +32,43 @@
                 </ul>
 
                 <div class="d-flex align-items-center text-light" sec:authorize="isAuthenticated()">
+                    
+                    <div class="dropdown me-3">
+                        <button class="btn btn-link text-light position-relative p-1 border-0" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell text-info fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                                  style="font-size: 0.65rem;"
+                                  th:if="${topNotifications != null and !#lists.isEmpty(topNotifications)}" 
+                                  th:text="${#lists.size(topNotifications)}">0</span>
+                        </button>
+                        
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-secondary bg-dark text-light p-0 animate slideIn" 
+                            aria-labelledby="notificationDropdown" 
+                            style="width: 340px; max-height: 400px; overflow-y: auto;">
+                            
+                            <li class="p-2 border-bottom border-secondary bg-secondary bg-opacity-10 d-flex justify-content-between align-items-center">
+                                <span class="mb-0 text-info fw-bold" style="font-size: 0.9rem;">
+                                    <i class="bi bi-activity me-1"></i> Hoạt động hệ thống
+                                </span>
+                                <span class="badge bg-info text-dark" style="font-size: 0.7rem;">Top 5</span>
+                            </li>
+                            
+                            <li th:if="${topNotifications == null or #lists.isEmpty(topNotifications)}" class="p-4 text-center text-muted">
+                                <small><i class="bi bi-bell-slash me-1 fs-5 d-block mb-1"></i> Chưa có hoạt động mới nào</small>
+                            </li>
+                            
+                            <li th:each="noti : ${topNotifications}" class="border-bottom border-secondary p-2 bg-dark text-light dropdown-item-text" style="white-space: normal;">
+                                <div class="d-flex flex-column">
+                                    <span class="text-light-50" style="font-size: 0.85rem; line-height: 1.4;" th:text="${noti.message}">Nội dung hoạt động</span>
+                                    <small class="text-muted mt-1" style="font-size: 0.75rem;">
+                                        <i class="bi bi-clock me-1"></i>
+                                        <span th:text="${#dates.format(noti.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2026 00:00</span>
+                                    </small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
                     <span class="me-3 bg-secondary bg-opacity-25 px-3 py-1 rounded-pill border border-secondary" style="font-size: 0.9rem;">
                         <i class="bi bi-person-fill text-info me-1"></i>
                         Xin chào, <strong class="text-warning" sec:authentication="name">User</strong>
