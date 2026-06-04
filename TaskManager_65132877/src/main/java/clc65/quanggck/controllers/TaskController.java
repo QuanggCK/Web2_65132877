@@ -62,7 +62,7 @@ public class TaskController {
     @PostMapping("/save") 
     public String saveTask(@ModelAttribute Task task, Principal principal) {
         
-        // 1. Kiểm tra và gán người tạo công việc (Đã xử lý ở bước trước)
+        // 1. Kiểm tra và gán người tạo công việc 
         if (principal != null) {
             String username = principal.getName();
             User currentUser = userService.getByUsername(username);
@@ -80,14 +80,11 @@ public class TaskController {
 
         }
         
-        // 3. Tiến hành lưu công việc hợp lệ xuống Database
         taskService.save(task);
-        
-        // 4. Điều hướng về danh sách công việc
         return "redirect:/tasks";
     }
 
-    // 4. Form sửa công việc (ĐÃ SỬA: Bổ sung định danh "id" vào @PathVariable)
+    // 4. Form sửa công việc 
     @GetMapping("/edit/{id}")
     public String editTask(@PathVariable("id") Integer id, Model model) {
         Task task = taskService.getTaskById(id);
@@ -98,7 +95,7 @@ public class TaskController {
 
         model.addAttribute("task", task);
         
-        // Cần thiết cho các thẻ <select> lựa chọn cập nhật trong edit.html
+ 
         model.addAttribute("projects", projectService.getAllProjects());
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("statuses", taskStatusService.getAll()); // Lấy danh sách trạng thái tiến độ
@@ -106,7 +103,7 @@ public class TaskController {
         return "task/edit";
     }
 
-    // 5. Cập nhật dữ liệu công việc (Đã tối ưu hóa tránh mất dữ liệu ẩn)
+    // 5. Cập nhật dữ liệu công việc 
     @PostMapping("/update")
     public String updateTask(@ModelAttribute Task task) {
         Task existingTask = taskService.getTaskById(task.getTaskId());
@@ -115,7 +112,6 @@ public class TaskController {
             return "redirect:/tasks";
         }
 
-        // Cập nhật các trường thông tin được phép sửa đổi từ form
         existingTask.setTitle(task.getTitle());
         existingTask.setDescription(task.getDescription());
         existingTask.setPriority(task.getPriority());
@@ -125,20 +121,20 @@ public class TaskController {
         existingTask.setAssignedTo(task.getAssignedTo());
         existingTask.setStatus(task.getStatus());
 
-        // Thực hiện lưu trữ đối tượng đã cập nhật
+
         taskService.save(existingTask);
 
         return "redirect:/tasks";
     }
 
-    // 6. Xóa công việc (ĐÃ SỬA: Bổ sung định danh "id" vào @PathVariable)
+    // 6. Xóa công việc 
     @GetMapping("/delete/{id}")
     public String deleteTask(@PathVariable("id") Integer id) {
         taskService.delete(id);
         return "redirect:/tasks";
     }
 
-    // 7. Chi tiết công việc (ĐÃ SỬA: Bổ sung định danh "id" vào @PathVariable)
+    // 7. Chi tiết công việc 
     @GetMapping("/{id}")
     public String detailTask(@PathVariable("id") Integer id, Model model) {
         Task task = taskService.getTaskById(id);
@@ -155,11 +151,11 @@ public class TaskController {
 
         return "task/detail";
     }
- // Thêm hàm này vào trong TaskController.java
+
     @PostMapping("/{id}/comment")
     public String addComment(@PathVariable("id") Integer id, 
                              @RequestParam("content") String content,
-                             Principal principal) { // <-- Thêm Principal để lấy user đang đăng nhập
+                             Principal principal) { 
         
         // 1. Kiểm tra công việc có tồn tại không
         Task task = taskService.getTaskById(id);
@@ -169,13 +165,11 @@ public class TaskController {
 
         // 2. Lấy thông tin tài khoản đang đăng nhập
         if (principal == null) {
-            // Nếu chưa đăng nhập mà bằng cách nào đó vào đây thì đá về trang login
             return "redirect:/login"; 
         }
-        String username = principal.getName(); // Lấy tên tài khoản/email đăng nhập
+        String username = principal.getName(); 
         
         // Tìm đối tượng User tương ứng trong Database
-        // Giả sử trong UserService của bạn có hàm findByUsername hoặc findByEmail
         User currentUser = userService.getByUsername(username); 
         
         if (currentUser == null) {
@@ -186,11 +180,8 @@ public class TaskController {
         Comment comment = new Comment();
         comment.setTask(task);
         comment.setContent(content);
-        comment.setUser(currentUser); // <-- QUAN TRỌNG: Gán user vào đây để hết lỗi NOT NULL
+        comment.setUser(currentUser); 
         
-        // Nếu trong Entity Comment chưa tự động sinh thời gian, bạn có thể gán thủ công:
-        // comment.setCreatedAt(new java.util.Date()); 
-
         // 4. Lưu vào Database
         commentService.save(comment);
 

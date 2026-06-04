@@ -9,10 +9,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
 @Configuration
 public class SecurityConfig {
-
-
-
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 	    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -31,9 +27,7 @@ public class SecurityConfig {
             			    "/css/**",
             			    "/js/**",
             			    "/tm.png",
-            			    "/**/*.png",
-            			    "/**/*.jpg",
-            			    "/**/*.jpeg"
+            			    "/**/*.png"
             			).permitAll()
 
                 .anyRequest().authenticated()

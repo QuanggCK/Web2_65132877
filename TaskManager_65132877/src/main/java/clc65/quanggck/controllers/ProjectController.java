@@ -10,6 +10,7 @@ import clc65.quanggck.services.ProjectService;
 import clc65.quanggck.services.UserService;
 import clc65.quanggck.services.ProjectMemberService;
 import clc65.quanggck.services.TaskService;
+import clc65.quanggck.services.NotificationService; 
 
 import java.security.Principal;
 import java.sql.Timestamp;
@@ -22,15 +23,19 @@ public class ProjectController {
     private final UserService userService;
     private final ProjectMemberService projectMemberService;
     private final TaskService taskService;
+    private final NotificationService notificationService; 
 
+ 
     public ProjectController(ProjectService projectService, 
                              UserService userService,
                              ProjectMemberService projectMemberService,
-                             TaskService taskService) {
+                             TaskService taskService,
+                             NotificationService notificationService) { 
         this.projectService = projectService;
         this.userService = userService;
         this.projectMemberService = projectMemberService;
         this.taskService = taskService;
+        this.notificationService = notificationService; 
     }
 
     // 1. Hiển thị danh sách dự án
@@ -47,22 +52,31 @@ public class ProjectController {
         return "project/add";
     }
 
-    // 3. Lưu dự án mới
+    // 3. Lưu dự án mới (ĐÃ TÍCH HỢP: Tự động ghi nhận thông báo hệ thống)
     @PostMapping("/save")
     public String saveProject(@ModelAttribute Project project, Principal principal) {
+        String creatorName = "Hệ thống"; // Tên mặc định phòng trường hợp không lấy được user
+        
         if (principal != null) {
             String username = principal.getName();
             User currentUser = userService.getByUsername(username);
+            
+            // Lấy tên hiển thị của user (hoặc username tùy thuộc vào thuộc tính Entity của bạn)
+            creatorName = currentUser.getUsername(); 
             
             project.setCreatedBy(currentUser);
             project.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         }
         
         projectService.save(project);
+        
+        // 🔔 BẮN THÔNG BÁO: Tự động lưu lịch sử khi thêm dự án mới thành công
+        notificationService.addNotification(creatorName + " đã khởi tạo dự án mới: " + project.getProjectName());
+        
         return "redirect:/projects";
     }
 
-    // 4. Form sửa thông tin dự án (ĐÃ SỬA: Xóa chữ /projects thừa)
+    // 4. Form sửa thông tin dự án (Đã giữ nguyên URL chuẩn của bạn)
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Project project = projectService.getProjectById(id);
@@ -91,14 +105,14 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-    // 6. Xóa dự án (ĐÃ SỬA: Xóa chữ /projects thừa)
+    // 6. Xóa dự án 
     @GetMapping("/delete/{id}")
     public String deleteProject(@PathVariable("id") Integer id) {
         projectService.delete(id); 
         return "redirect:/projects"; 
     }
     
-    // 7. Chi tiết dự án (ĐÃ SỬA: Bổ sung định danh "id" để không bị lỗi 500)
+    // 7. Chi tiết dự án 
     @GetMapping("/{id}")
     public String detailProject(@PathVariable("id") Integer id, Model model) {
         Project project = projectService.getProjectById(id);
