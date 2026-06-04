@@ -12,6 +12,7 @@ import clc65.quanggck.services.ProjectService;
 import clc65.quanggck.services.UserService;
 import clc65.quanggck.services.TaskStatusService;
 import clc65.quanggck.services.CommentService;
+import clc65.quanggck.services.NotificationService; 
 
 import java.security.Principal;
 import java.util.List;
@@ -25,18 +26,21 @@ public class TaskController {
     private final UserService userService;
     private final TaskStatusService taskStatusService;
     private final CommentService commentService;
+    private final NotificationService notificationService; 
 
-    // Inject đầy đủ các Service bổ trợ để phục vụ việc nạp dữ liệu lên View Thymeleaf
+
     public TaskController(TaskService taskService, 
                           ProjectService projectService, 
                           UserService userService, 
                           TaskStatusService taskStatusService,
-                          CommentService commentService) {
+                          CommentService commentService,
+                          NotificationService notificationService) { 
         this.taskService = taskService;
         this.projectService = projectService;
         this.userService = userService;
         this.taskStatusService = taskStatusService;
         this.commentService = commentService;
+        this.notificationService = notificationService; 
     }
 
     // 1. Danh sách công việc
@@ -58,15 +62,19 @@ public class TaskController {
         return "task/add";
     }
 
- // 3. Lưu công việc mới
+    // 3. Lưu công việc mới (ĐÃ TÍCH HỢP: Tự động bắn thông báo khi lưu thành công)
     @PostMapping("/save") 
     public String saveTask(@ModelAttribute Task task, Principal principal) {
+        String creatorName = "Hệ thống";
         
         // 1. Kiểm tra và gán người tạo công việc 
         if (principal != null) {
             String username = principal.getName();
             User currentUser = userService.getByUsername(username);
             task.setCreatedBy(currentUser);
+            if (currentUser != null) {
+                creatorName = currentUser.getUsername(); // Lấy tên người tạo để làm thông báo
+            }
         } else {
             return "redirect:/login";
         }
@@ -74,13 +82,15 @@ public class TaskController {
         if (task.getStatus() == null) {
             java.util.List<clc65.quanggck.models.TaskStatus> statuses = taskStatusService.getAll();
             if (statuses != null && !statuses.isEmpty()) {
-    
                 task.setStatus(statuses.get(0)); 
             }
-
         }
         
         taskService.save(task);
+
+        // 🔔 BẮN THÔNG BÁO: Tự động lưu lịch sử khi thêm công việc mới thành công
+        notificationService.addNotification(creatorName + " đã thêm công việc mới: " + task.getTitle());
+
         return "redirect:/tasks";
     }
 
@@ -95,7 +105,6 @@ public class TaskController {
 
         model.addAttribute("task", task);
         
- 
         model.addAttribute("projects", projectService.getAllProjects());
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("statuses", taskStatusService.getAll()); // Lấy danh sách trạng thái tiến độ
@@ -120,7 +129,6 @@ public class TaskController {
         existingTask.setProject(task.getProject());
         existingTask.setAssignedTo(task.getAssignedTo());
         existingTask.setStatus(task.getStatus());
-
 
         taskService.save(existingTask);
 
@@ -152,6 +160,7 @@ public class TaskController {
         return "task/detail";
     }
 
+    // 8. Thêm bình luận (ĐÃ TÍCH HỢP: Tự động bắn thông báo khi gửi bình luận)
     @PostMapping("/{id}/comment")
     public String addComment(@PathVariable("id") Integer id, 
                              @RequestParam("content") String content,
@@ -184,6 +193,8 @@ public class TaskController {
         
         // 4. Lưu vào Database
         commentService.save(comment);
+
+        notificationService.addNotification(currentUser.getUsername() + " đã để lại bình luận tại công việc: " + task.getTitle());
 
         // 5. Quay lại trang chi tiết công việc
         return "redirect:/tasks/" + id;
