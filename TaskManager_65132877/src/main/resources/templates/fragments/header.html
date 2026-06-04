@@ -42,7 +42,7 @@
                                   th:text="${#lists.size(topNotifications)}">0</span>
                         </button>
                         
-                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-secondary bg-dark text-light p-0 animate slideIn" 
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-secondary bg-dark text-light p-0" 
                             aria-labelledby="notificationDropdown" 
                             style="width: 340px; max-height: 400px; overflow-y: auto;">
                             
@@ -50,20 +50,15 @@
                                 <span class="mb-0 text-info fw-bold" style="font-size: 0.9rem;">
                                     <i class="bi bi-activity me-1"></i> Hoạt động hệ thống
                                 </span>
-                                <span class="badge bg-info text-dark" style="font-size: 0.7rem;">Top 5</span>
                             </li>
                             
                             <li th:if="${topNotifications == null or #lists.isEmpty(topNotifications)}" class="p-4 text-center text-muted">
                                 <small><i class="bi bi-bell-slash me-1 fs-5 d-block mb-1"></i> Chưa có hoạt động mới nào</small>
                             </li>
                             
-                            <li th:each="noti : ${topNotifications}" class="border-bottom border-secondary p-2 bg-dark text-light dropdown-item-text" style="white-space: normal;">
+                            <li th:each="noti : ${topNotifications}" class="border-bottom border-secondary p-2.5 bg-dark text-light dropdown-item-text" style="white-space: normal;">
                                 <div class="d-flex flex-column">
-                                    <span class="text-light-50" style="font-size: 0.85rem; line-height: 1.4;" th:text="${noti.message}">Nội dung hoạt động</span>
-                                    <small class="text-muted mt-1" style="font-size: 0.75rem;">
-                                        <i class="bi bi-clock me-1"></i>
-                                        <span th:text="${#dates.format(noti.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2026 00:00</span>
-                                    </small>
+                                    <span class="text-light-50 mb-1" style="font-size: 0.85rem; line-height: 1.4;" th:text="${noti.message}">Nội dung hoạt động</span>                                  
                                 </div>
                             </li>
                         </ul>

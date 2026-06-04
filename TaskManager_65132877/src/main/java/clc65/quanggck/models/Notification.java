@@ -1,7 +1,7 @@
 package clc65.quanggck.models;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "notifications")
@@ -13,8 +13,9 @@ public class Notification {
     @Column(nullable = false, length = 500)
     private String message;
 
-    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp createdAt;
+    @org.hibernate.annotations.CreationTimestamp 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private java.util.Date createdAt;
 
     public Notification() {}
 
@@ -27,6 +28,11 @@ public class Notification {
     public void setId(Long id) { this.id = id; }
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
-    public Timestamp getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 }
